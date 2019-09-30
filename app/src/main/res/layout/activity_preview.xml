@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".PreviewActivity"
+        android:orientation="vertical"
+        android:background="#EEE6CB">
+    <androidx.drawerlayout.widget.DrawerLayout android:layout_width="match_parent"
+                                               android:layout_height="match_parent">
+        <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+            <LinearLayout android:layout_width="match_parent"
+                          android:orientation="vertical"
+                          android:layout_height="match_parent">
+                <TextView
+                        android:id="@+id/preview_tv"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:textColor="#e2000000"
+                        android:padding="10dp"
+                        tools:text="加载中..."
+                        android:textSize="20sp"
+                        android:lineSpacingMultiplier="1.4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="45dp">
+                    <Button
+                            android:id="@+id/last_catalog"
+                            android:layout_weight="1.0"
+                            android:text="上一章"
+                            android:layout_width="match_parent" android:layout_height="match_parent"/>
+                    <Button
+                            android:id="@+id/next_catalog"
+                            android:layout_weight="1.0"
+                            android:text="下一章"
+                            android:layout_width="match_parent" android:layout_height="match_parent"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:background="@color/white"
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_gravity="start"
+                android:layout_height="match_parent"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>
