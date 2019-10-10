@@ -66,7 +66,8 @@ public class SearchObserver implements Observer<List<Book>> {
                             try {
                                 results = site.search(bookName);
                                 for (Book book : results) {
-                                    book.setBookName(book.getBookName().replaceAll("[《》]", ""));
+                                    book.setBookName(book.getBookName().replaceAll("[《》]", ""));// str.replaceAll("[^0-9a-zA-Z\u4e00-\u9fa5.，,。？“”]+","")；
+                                    book.setAuthor(book.getAuthor().replaceAll("[.,，。？“” ]",""));
                                 }
                             } catch (final Exception e) {
                                 post(new Runnable() {

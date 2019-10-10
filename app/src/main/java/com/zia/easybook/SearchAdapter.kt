@@ -12,6 +12,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.zia.easybookmodule.bean.Book
 import kotlinx.android.synthetic.main.item_search.view.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
+import java.util.TreeSet
 
 /**
  * Created by zia on 2018/11/1.
@@ -47,6 +50,20 @@ class SearchAdapter(val bookSelectListener: BookSelectListener, var mContext: Co
         })
         return result
     }
+
+   /* private fun merge(t: ArrayList<Book>) {
+        val treeSet = TreeSet(Comparator<Book> { o1, o2 ->
+            val compareToName = o1.bookName.compareTo(o2.bookName)
+            val compareToAuther = o1.author.compareTo(o2.author)
+            if (compareToName == 0 && compareToAuther == 0) {
+                0
+            } else {
+                1
+            }
+        })
+        treeSet.addAll(t)
+        val list = ArrayList<Book>(treeSet)
+    }*/
 
     fun clear() {
         this.books.clear()

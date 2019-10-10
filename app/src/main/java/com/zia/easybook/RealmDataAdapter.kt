@@ -81,7 +81,7 @@ class RealmDataAdapter(val bookSelectListener: BookSelectListener, var mContext:
                 holder.itemView.item_book_lastUpdateTime.text = "更新：${book.lastUpdateTime}"
                 holder.itemView.setOnClickListener { bookSelectListener.onBookSelect(holder.itemView, book) }
                 holder.itemView.setOnLongClickListener {
-                    longClickListener.onLongClickListener(holder.itemView, book,position)
+                    longClickListener.onLongClickListener(holder.itemView, book, position)
                     false
                 }
 
@@ -96,7 +96,7 @@ class RealmDataAdapter(val bookSelectListener: BookSelectListener, var mContext:
     }
 
     interface OnLongClickListener {
-        fun onLongClickListener(itemView: View, book: BookRealm,position: Int)
+        fun onLongClickListener(itemView: View, book: BookRealm, position: Int)
     }
 
     fun setOnLongClickListener(listener: OnLongClickListener) {

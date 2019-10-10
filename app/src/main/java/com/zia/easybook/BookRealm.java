@@ -1,36 +1,35 @@
 package com.zia.easybook;
 
-import com.zia.easybookmodule.bean.Catalog;
 import io.realm.RealmObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * author: kang4
- * Date: 2019/9/18
+ * Date: 2019/10/9
  * Description:
  */
 public class BookRealm extends RealmObject implements Serializable {
-    private String bookName = "";
-    private String author = "";
+
+    public String bookName = "";
+    public String author = "";
     //小说目录页地址
-    private String url = "";
-    private String imageUrl = "";
+    public String url = "";
+    public String imageUrl = "";
     //章节数量
-    private String chapterSize = "";
+    public String chapterSize = "";
     //最后更新时间
-    private String lastUpdateTime = "";
+    public String lastUpdateTime = "";
     //最新章节名
-    private String lastChapterName = "";
+    public String lastChapterName = "";
     //小说网站名字
-    private String siteName = "";
+    public String siteName = "";
     //小说简介
-    private String introduce = "";
+    public String introduce = "";
     //小说分类
-    private String classify = "";
+    public String classify = "";
     //小说状态，连载，完结等
-    private String status = "";
+    public String status = "";
 
 
     public String getBookName() {
@@ -122,27 +121,22 @@ public class BookRealm extends RealmObject implements Serializable {
     }
 
     public static int compare(String targetName, BookRealm o1, BookRealm o2) {
-        if (o1.getBookName().equals(targetName) && !o2.getBookName().equals(targetName)) {
+        if (o1.bookName == targetName && o2.bookName != targetName) {
             return -1;
-        } else if (!o1.getBookName().equals(targetName) && o2.getBookName().equals(targetName)) {
+        } else if (o1.bookName != targetName && o2.bookName == targetName) {
             return 1;
-        }
+        } else if (o1.bookName.contains(targetName) && !o2.bookName.contains(targetName)) {
+            return -1;
+        } else if (!o1.bookName.contains(targetName) && o2.bookName.contains(targetName)) {
+            return 1;
+        } else if (o1.bookName.contains(targetName) && o2.bookName.contains(targetName)) {
+            return o1.bookName.indexOf(targetName) - o2.bookName.indexOf(targetName);
+        } else if (o1.bookName.length() == targetName.length() && o2.bookName.length() != targetName.length()) {
+            return -1;
+        } else if (o1.bookName.length() != targetName.length() && o2.bookName.length() == targetName.length()) {
+            return 1;
+        }//长度相同
         //包含了字符
-        else if (o1.getBookName().contains(targetName) && !o2.getBookName().contains(targetName)) {
-            return -1;
-        } else if (!o1.getBookName().contains(targetName) && o2.getBookName().contains(targetName)) {
-            return 1;
-        } else if (o1.getBookName().contains(targetName) && o2.getBookName().contains(targetName)) {
-            return o1.getBookName().indexOf(targetName) - o2.getBookName().indexOf(targetName);
-        }
-        //长度相同
-        else if (o1.getBookName().length() == targetName.length()
-                && o2.getBookName().length() != targetName.length()) {
-            return -1;
-        } else if (o1.getBookName().length() != targetName.length()
-                && o2.getBookName().length() == targetName.length()) {
-            return 1;
-        }
         return 0;
     }
 }
