@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.zia.easybookmodule.bean.Catalog
 import kotlinx.android.synthetic.main.item_catalog.view.*
@@ -13,13 +14,13 @@ import java.util.*
 /**
  * Created by zia on 2018/11/1.
  */
-class CatalogAdapter(private val catalogSelectListener: CatalogSelectListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CatalogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var catalogs: ArrayList<Catalog>? = null
+    var list = ArrayList<Catalog>()
+    private lateinit var mListener: onItemClickListener
 
     fun freshCatalogs(catalogs: ArrayList<Catalog>) {
-        this.catalogs = catalogs
+        this.list = catalogs
         notifyDataSetChanged()
     }
 
@@ -29,24 +30,17 @@ class CatalogAdapter(private val catalogSelectListener: CatalogSelectListener) :
     }
 
     override fun getItemCount(): Int {
-        return if (catalogs == null) 0
-        else {
-            catalogs!!.size
-        }
+        return list.size
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CatalogHolder -> {
-                val catalog = catalogs!![position]
+                val catalog = list[position]
                 holder.itemView.item_catalog_name.text = catalog.chapterName
                 holder.itemView.setOnClickListener {
-                    catalogSelectListener.onCatalogSelect(
-                        holder.itemView,
-                        position,
-                        catalog
-                    )
+                    mListener?.onItemClick(catalog)
                 }
             }
         }
@@ -54,7 +48,11 @@ class CatalogAdapter(private val catalogSelectListener: CatalogSelectListener) :
 
     class CatalogHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    interface CatalogSelectListener {
-        fun onCatalogSelect(itemView: View, position: Int, catalog: Catalog)
+    interface onItemClickListener {
+        fun onItemClick(catalog: Catalog)
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener) {
+        this.mListener = listener
     }
 }

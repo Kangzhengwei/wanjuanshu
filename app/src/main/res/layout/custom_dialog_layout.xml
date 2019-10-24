@@ -7,11 +7,17 @@
               android:orientation="vertical">
 
 
-    <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar"/>
+    <LinearLayout android:layout_width="80dp"
+                  android:background="@drawable/dialog_shape"
+                  android:gravity="center"
+                  android:layout_height="80dp">
+        <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"/>
+    </LinearLayout>
+
     <TextView
             android:text=""
             android:layout_width="match_parent"

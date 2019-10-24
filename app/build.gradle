@@ -20,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -42,5 +47,5 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation files('libs/systembartint-1.0.4.jar')
-    implementation project(':library')
+    implementation 'com.luhuiguo:chinese-utils:1.0'
 }

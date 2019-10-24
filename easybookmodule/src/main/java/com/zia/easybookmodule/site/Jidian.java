@@ -62,12 +62,14 @@ public class Jidian extends Site {
         Elements lists = Jsoup.parse(catalogHtml).getElementsByClass("novel_list");
         List<Catalog> catalogs = new ArrayList<>();
         String root = rootUrl.replace("index.html", "");
+        int i=0;
         for (Element list : lists) {
             Elements as = list.getElementsByTag("a");
             for (Element a : as) {
                 String href = root + a.attr("href");
                 String name = a.text();
-                catalogs.add(new Catalog(name, href));
+                catalogs.add(new Catalog(name, href,i));
+                i++;
             }
         }
         return catalogs;

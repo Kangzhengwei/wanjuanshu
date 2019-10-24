@@ -29,10 +29,12 @@ public class Binhuo extends Site {
     public List<Catalog> parseCatalog(String catalogHtml, String rootUrl) {
         Elements as = Jsoup.parse(catalogHtml).getElementsByClass("float-list fill-block").first().getElementsByTag("a");
         List<Catalog> catalogs = new ArrayList<>();
+        int i = 0;
         for (Element a : as) {
             String href = rootUrl + a.attr("href");
             String name = a.text();
-            catalogs.add(new Catalog(name, href));
+            catalogs.add(new Catalog(name, href, i));
+            i++;
         }
         return catalogs;
     }

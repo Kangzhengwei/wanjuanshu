@@ -22,7 +22,8 @@ import kotlinx.android.synthetic.main.activity_catalog.*
 import java.io.File
 import java.util.*
 
-class CatalogActivity : AppCompatActivity(), CatalogAdapter.CatalogSelectListener {
+class CatalogActivity : AppCompatActivity(), CatalogAdapter.onItemClickListener {
+
 
     private lateinit var book: Book
     private lateinit var adapter: CatalogAdapter
@@ -47,33 +48,34 @@ class CatalogActivity : AppCompatActivity(), CatalogAdapter.CatalogSelectListene
         book = intent.getSerializableExtra("book") as Book
         initBookInfo()
 
-        adapter = CatalogAdapter(this)
+        adapter = CatalogAdapter()
         catalogRv.layoutManager = LinearLayoutManager(this)
         catalogRv.adapter = adapter
+        adapter.setOnItemClickListener(this)
 
         searchDisposable = EasyBook.getCatalog(book)
-            .subscribe(object : Subscriber<List<Catalog>> {
-                @SuppressLint("SetTextI18n")
-                override fun onFinish(t: List<Catalog>) {
-                    val arrayList = ArrayList<Catalog>(t)
-                    adapter.freshCatalogs(arrayList)
-                    book_loading.visibility = View.GONE
-                    catalog_intro.text = 12288.toChar().toString() + 12288.toChar() + book.introduce
-                }
+                .subscribe(object : Subscriber<List<Catalog>> {
+                    @SuppressLint("SetTextI18n")
+                    override fun onFinish(t: List<Catalog>) {
+                        val arrayList = ArrayList<Catalog>(t)
+                        adapter.freshCatalogs(arrayList)
+                        book_loading.visibility = View.GONE
+                        catalog_intro.text = 12288.toChar().toString() + 12288.toChar() + book.introduce
+                    }
 
-                override fun onError(e: Exception) {
-                    Toast.makeText(this@CatalogActivity, e.message, Toast.LENGTH_SHORT).show()
-                    book_loading.text = e.message
-                }
+                    override fun onError(e: Exception) {
+                        Toast.makeText(this@CatalogActivity, e.message, Toast.LENGTH_SHORT).show()
+                        book_loading.text = e.message
+                    }
 
-                override fun onMessage(message: String) {
+                    override fun onMessage(message: String) {
 
-                }
+                    }
 
-                override fun onProgress(progress: Int) {
-                }
+                    override fun onProgress(progress: Int) {
+                    }
 
-            })
+                })
 
         book_download.setOnClickListener {
             chooseType()
@@ -86,30 +88,30 @@ class CatalogActivity : AppCompatActivity(), CatalogAdapter.CatalogSelectListene
     private fun download(type: Type) {
         Toast.makeText(this@CatalogActivity, "请手动打开文件读写权限", Toast.LENGTH_SHORT).show()
         downloadDisposable = EasyBook.download(book)
-            .setType(type)
-            .setThreadCount(150)
-            .setSavePath(Environment.getExternalStorageDirectory().path + File.separator + "book")
-            .subscribe(object : Subscriber<File> {
-                override fun onFinish(t: File) {
-                    hideDialog()
-                    Log.e("CatalogActivity", t.path)
-                    Toast.makeText(this@CatalogActivity, "保存成功，位置在${t.path}", Toast.LENGTH_SHORT).show()
-                }
+                .setType(type)
+                .setThreadCount(150)
+                .setSavePath(Environment.getExternalStorageDirectory().path + File.separator + "book")
+                .subscribe(object : Subscriber<File> {
+                    override fun onFinish(t: File) {
+                        hideDialog()
+                        Log.e("CatalogActivity", t.path)
+                        Toast.makeText(this@CatalogActivity, "保存成功，位置在${t.path}", Toast.LENGTH_SHORT).show()
+                    }
 
-                override fun onError(e: java.lang.Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(this@CatalogActivity, e.message, Toast.LENGTH_SHORT).show()
-                    hideDialog()
-                }
+                    override fun onError(e: java.lang.Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this@CatalogActivity, e.message, Toast.LENGTH_SHORT).show()
+                        hideDialog()
+                    }
 
-                override fun onMessage(message: String) {
-                    updateDialog(message)
-                }
+                    override fun onMessage(message: String) {
+                        updateDialog(message)
+                    }
 
-                override fun onProgress(progress: Int) {
-                    updateDialog(progress)
-                }
-            })
+                    override fun onProgress(progress: Int) {
+                        updateDialog(progress)
+                    }
+                })
     }
 
     override fun onDestroy() {
@@ -118,8 +120,8 @@ class CatalogActivity : AppCompatActivity(), CatalogAdapter.CatalogSelectListene
         super.onDestroy()
     }
 
-    override fun onCatalogSelect(itemView: View, position: Int, catalog: Catalog) {
-        val intent = Intent(this@CatalogActivity, PreviewActivity::class.java)
+    override fun onItemClick(catalog: Catalog) {
+        val intent = Intent(this@CatalogActivity, ReadActivity::class.java)
         intent.putExtra("catalog", catalog)
         intent.putExtra("book", book)
         startActivity(intent)
@@ -128,22 +130,22 @@ class CatalogActivity : AppCompatActivity(), CatalogAdapter.CatalogSelectListene
     private fun chooseType() {
         val types = arrayOf("EPUB", "TXT")
         val style =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) android.R.style.Theme_Material_Light_Dialog
-            else android.R.style.Theme_DeviceDefault_Light_Dialog
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) android.R.style.Theme_Material_Light_Dialog
+                else android.R.style.Theme_DeviceDefault_Light_Dialog
         AlertDialog.Builder(this, style)
-            .setTitle("选择下载格式")
-            .setItems(types) { dialog, which ->
-                var type = Type.EPUB
-                when (which) {
-                    0 -> {
-                        type = Type.EPUB
+                .setTitle("选择下载格式")
+                .setItems(types) { dialog, which ->
+                    var type = Type.EPUB
+                    when (which) {
+                        0 -> {
+                            type = Type.EPUB
+                        }
+                        1 -> {
+                            type = Type.TXT
+                        }
                     }
-                    1 -> {
-                        type = Type.TXT
-                    }
-                }
-                download(type)
-            }.show()
+                    download(type)
+                }.show()
     }
 
     private fun initBookInfo() {

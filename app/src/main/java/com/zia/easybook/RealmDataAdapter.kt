@@ -2,6 +2,7 @@ package com.zia.easybook
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.zia.easybook.Dao.BookRealm
 import kotlinx.android.synthetic.main.item_search.view.*
+
 
 /**
  * author: kang4
@@ -19,12 +22,18 @@ import kotlinx.android.synthetic.main.item_search.view.*
  */
 
 class RealmDataAdapter(val bookSelectListener: BookSelectListener, var mContext: Context) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var books: List<BookRealm> = ArrayList<BookRealm>()
     private lateinit var longClickListener: OnLongClickListener
 
+   /* private val width = DimenUtil.dip2px(mContext, 12f)
+    private val singleWidth = (DimenUtil.getScreeWidth(mContext as Activity) - 4 * width) / 3
+    private val singleHeight = (singleWidth * 1.25).toInt()
+*/
+
     fun freshBooks(books: List<BookRealm>) {
+
         this.books = books
         notifyDataSetChanged()
     }
@@ -66,25 +75,49 @@ class RealmDataAdapter(val bookSelectListener: BookSelectListener, var mContext:
         when (holder) {
             is BookHolder -> {
                 val book = books[position]
-                var options = RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.mipmap.icon_default)
-                    .error(R.mipmap.icon_default)
-                    .fallback(R.mipmap.icon_default)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL);
-                Glide.with(mContext).load(book.imageUrl).apply(options)
-                    .into(holder.itemView.roundImageView)
+                val options = RequestOptions()
+                        .centerCrop()
+                        .placeholder(R.mipmap.icon_default)
+                        .error(R.mipmap.icon_default)
+                        .fallback(R.mipmap.icon_default)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                Glide.with(mContext).load(book.imageUrl).apply(options).into(holder.itemView.roundImageView)
                 holder.itemView.item_book_name.text = book.bookName
                 holder.itemView.item_book_author.text = book.author
-                holder.itemView.item_book_lastUpdateChapter.text = "最新：${book.lastChapterName}"
-                holder.itemView.item_book_site.text = book.siteName
-                holder.itemView.item_book_lastUpdateTime.text = "更新：${book.lastUpdateTime}"
                 holder.itemView.setOnClickListener { bookSelectListener.onBookSelect(holder.itemView, book) }
                 holder.itemView.setOnLongClickListener {
                     longClickListener.onLongClickListener(holder.itemView, book, position)
                     false
                 }
+                /*val params = holder.itemView.roundImageView.layoutParams
+                params.height = singleHeight
+                params.width = singleWidth
+                holder.itemView.roundImageView.layoutParams = params*/
 
+                if (!TextUtils.isEmpty(book.imageUrl)) {
+                    holder.itemView.item_book_name.visibility = View.INVISIBLE
+                    holder.itemView.item_book_author.visibility = View.INVISIBLE
+                } else {
+                    holder.itemView.item_book_name.visibility = View.VISIBLE
+                    holder.itemView.item_book_author.visibility = View.VISIBLE
+                }
+               /* when {
+                    position % 3 == 0 -> {
+                        val cdlp = RelativeLayout.LayoutParams(holder.itemView.item_book_layout.layoutParams)
+                        cdlp.setMargins(width, width, width, 0)
+                        holder.itemView.item_book_layout.layoutParams = cdlp
+                    }
+                    position % 3 == 2 -> {
+                        val cdlp = RelativeLayout.LayoutParams(holder.itemView.item_book_layout.layoutParams)
+                        cdlp.setMargins(width, width, width, 0)
+                        holder.itemView.item_book_layout.layoutParams = cdlp
+                    }
+                    else -> {
+                        val cdlp = RelativeLayout.LayoutParams(holder.itemView.item_book_layout.layoutParams)
+                        cdlp.setMargins(0, width, 0, 0)
+                        holder.itemView.item_book_layout.layoutParams = cdlp
+                    }
+                }*/
             }
         }
     }
@@ -104,10 +137,10 @@ class RealmDataAdapter(val bookSelectListener: BookSelectListener, var mContext:
     }
 
     private inner class DiffCallBack(private val oldDatas: List<BookRealm>, private val newDatas: List<BookRealm>) :
-        DiffUtil.Callback() {
+            DiffUtil.Callback() {
 
         override fun areItemsTheSame(p0: Int, p1: Int): Boolean {
-            return oldDatas[p0].bookName == newDatas[p1].bookName && oldDatas[p0].siteName == newDatas[p1].siteName
+            return oldDatas[p0].bookName == newDatas[p1].bookName
         }
 
         override fun getOldListSize(): Int {
@@ -119,7 +152,7 @@ class RealmDataAdapter(val bookSelectListener: BookSelectListener, var mContext:
         }
 
         override fun areContentsTheSame(p0: Int, p1: Int): Boolean {
-            return oldDatas[p0].bookName == newDatas[p1].bookName && oldDatas[p0].siteName == newDatas[p1].siteName
+            return oldDatas[p0].bookName == newDatas[p1].bookName
         }
 
     }

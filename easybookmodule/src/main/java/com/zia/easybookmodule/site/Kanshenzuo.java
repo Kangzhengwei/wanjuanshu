@@ -75,11 +75,13 @@ public class Kanshenzuo extends Site {
         String ssub = sub.split("正文</dt>")[1];
         List<String> as = RegexUtil.regexInclude("<a", "</a>", ssub);
         List<Catalog> list = new ArrayList<>();
+        int i=0;
         for (String s : as) {
             RegexUtil.Tag tag = new RegexUtil.Tag(s);
             String name = tag.getText();
             String href = root + tag.getValue("href");
-            list.add(new Catalog(name, href));
+            list.add(new Catalog(name, href,i));
+            i++;
         }
         return list;
     }

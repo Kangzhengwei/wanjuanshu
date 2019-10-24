@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".SearchActivity"/>
         <activity android:name=".CatalogActivity"/>
-        <activity android:name=".PreviewActivity"/>
+        <activity android:name=".ReadActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -127,7 +127,7 @@ public class CustomXpathSite extends Site {
                 catalogChapterName = Parser.unescapeEntities(catalogChapterName, true);
                 String catalogChapterUrl = xPath.evaluate(xpathRule.getCatalogChapterUrl(), node).trim();
                 catalogChapterUrl = BookGriper.mergeUrl(rootUrl, catalogChapterUrl);
-                Catalog catalog = new Catalog(catalogChapterName, catalogChapterUrl);
+                Catalog catalog = new Catalog(catalogChapterName, catalogChapterUrl,i);
                 catalogList.add(catalog);
             }
             if (debug) {

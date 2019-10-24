@@ -29,10 +29,12 @@ public class Shunong extends Site {
         Elements lis = Jsoup.parse(catalogHtml).getElementsByClass("book_list").first().getElementsByTag("li");
 
         List<Catalog> catalogs = new ArrayList<>();
+        int i=0;
         for (Element li : lis) {
             String title = li.getElementsByTag("a").first().text();
             String href = root + li.getElementsByTag("a").first().attr("href");
-            catalogs.add(new Catalog(title, href));
+            catalogs.add(new Catalog(title, href,i));
+            i++;
         }
         return catalogs;
     }

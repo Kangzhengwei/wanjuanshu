@@ -1,61 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReadActivity">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".PreviewActivity"
-        android:orientation="vertical"
-        android:background="#EEE6CB">
-    <androidx.drawerlayout.widget.DrawerLayout android:layout_width="match_parent"
-                                               android:layout_height="match_parent">
-        <ScrollView
-                android:id="@+id/scrollView"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.zia.easybook.widget.PageView
+                android:id="@+id/pageView"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent">
-            <LinearLayout android:layout_width="match_parent"
-                          android:orientation="vertical"
-                          android:layout_height="match_parent">
-                <TextView
-                        android:id="@+id/preview_tv"
-                        android:paddingLeft="25dp"
-                        android:paddingRight="25dp"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:textColor="#e2000000"
-                        android:padding="10dp"
-                        tools:text="加载中..."
-                        android:textSize="20sp"
-                        android:lineSpacingMultiplier="1.4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                android:clickable="true"
+                android:focusable="true" />
 
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="45dp">
-                    <Button
-                            android:id="@+id/last_catalog"
-                            android:layout_weight="1.0"
-                            android:text="上一章"
-                            android:layout_width="match_parent" android:layout_height="match_parent"/>
-                    <Button
-                            android:id="@+id/next_catalog"
-                            android:layout_weight="1.0"
-                            android:text="下一章"
-                            android:layout_width="match_parent" android:layout_height="match_parent"/>
-                </LinearLayout>
+            <FrameLayout
+                android:id="@+id/menu_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible">
 
-            </LinearLayout>
-        </ScrollView>
+                <com.zia.easybook.widget.TopMenuLayout
+                    android:id="@+id/topmenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:visibility="invisible" />
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:background="@color/white"
+                <com.zia.easybook.widget.BottomMenuLayout
+                    android:id="@+id/bottommenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:visibility="invisible" />
+            </FrameLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/slideLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/background_menu"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
-                android:layout_gravity="start"
-                android:layout_height="match_parent"/>
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
+                android:fitsSystemWindows="true" />
+
+        </LinearLayout>
+
 
     </androidx.drawerlayout.widget.DrawerLayout>
+
 
 </LinearLayout>

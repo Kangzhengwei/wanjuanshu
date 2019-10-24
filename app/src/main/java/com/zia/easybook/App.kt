@@ -1,6 +1,8 @@
 package com.zia.easybook
 
 import android.app.Application
+import android.content.SharedPreferences
+import android.content.res.Resources
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -9,16 +11,20 @@ import io.realm.RealmConfiguration
  */
 class App : Application() {
 
+    private lateinit var configPreferences: SharedPreferences
+
+
     override fun onCreate() {
         super.onCreate()
-        /* if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);*/
+        instance=this
+        init()
         initDataBase()
     }
+
+    private fun init() {
+        configPreferences = getSharedPreferences("CONFIG", 0)
+    }
+
 
     /**
      * 初始化数据库
@@ -31,5 +37,25 @@ class App : Application() {
             .deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(config)
+    }
+
+    companion object {
+        private lateinit var instance: App
+
+        fun getConfigPreferences(): SharedPreferences {
+            return getInstance().configPreferences
+        }
+
+        fun getInstance(): App {
+            return instance
+        }
+
+        fun getAppResources(): Resources {
+            return getInstance().resources
+        }
+    }
+
+    fun isNightTheme(): Boolean {
+        return configPreferences.getBoolean("nightTheme", false)
     }
 }

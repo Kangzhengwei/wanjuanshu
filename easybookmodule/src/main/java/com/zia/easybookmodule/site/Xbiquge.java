@@ -65,10 +65,12 @@ public class Xbiquge extends Site {
     public List<Catalog> parseCatalog(String catalogHtml, String rootUrl) {
         Element listElement = Jsoup.parse(catalogHtml).getElementById("list");
         List<Catalog> catalogs = new ArrayList<>();
+        int i=0;
         for (Element a : listElement.getElementsByTag("a")) {
             String bkUrl = root + a.attr("href");
             String name = a.text();
-            catalogs.add(new Catalog(name, bkUrl));
+            catalogs.add(new Catalog(name, bkUrl,i));
+            i++;
         }
         return catalogs;
     }

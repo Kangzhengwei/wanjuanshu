@@ -50,11 +50,13 @@ public class Wulin extends Site {
         String ssub = sub.split("正文</h5>")[1];
         List<String> as = RegexUtil.regexInclude("<a", "</a>", ssub);
         List<Catalog> list = new ArrayList<>();
+        int i=0;
         for (String s : as) {
             RegexUtil.Tag tag = new RegexUtil.Tag(s);
             String name = tag.getText();
             String href = rootUrl + tag.getValue("href");
-            list.add(new Catalog(name, href));
+            list.add(new Catalog(name, href,i));
+            i++;
         }
         return list;
     }

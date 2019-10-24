@@ -75,11 +75,13 @@ public class BookGriper {
         }
         List<String> as = RegexUtil.regexInclude("<a", "</a>", sub);
         List<Catalog> list = new ArrayList<>();
+        int i = 0;
         for (String s : as) {
             RegexUtil.Tag tag = new RegexUtil.Tag(s);
             String name = tag.getText();
             String href = mergeUrl(url, tag.getValue("href"));
-            list.add(new Catalog(name, href));
+            list.add(new Catalog(name, href, i));
+            i++;
         }
         return list;
     }

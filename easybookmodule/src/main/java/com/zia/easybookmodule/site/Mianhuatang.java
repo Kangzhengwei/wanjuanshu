@@ -53,11 +53,13 @@ public class Mianhuatang extends Site {
     public List<Catalog> parseCatalog(String catalogHtml, String rootUrl) {
         Elements dds = Jsoup.parse(catalogHtml).getElementsByTag("dd");
         List<Catalog> catalogs = new ArrayList<>();
+        int i=0;
         for (Element dd : dds) {
             Element a = dd.getElementsByTag("a").first();
             String href = a.attr("href");
             String name = a.text();
-            catalogs.add(new Catalog(name, href));
+            catalogs.add(new Catalog(name, href,i));
+            i++;
         }
         return catalogs;
     }

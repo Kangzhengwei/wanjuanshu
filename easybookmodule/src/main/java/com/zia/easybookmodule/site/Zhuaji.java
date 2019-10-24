@@ -28,10 +28,12 @@ public class Zhuaji extends Site {
         List<Catalog> catalogs = new ArrayList<>();
 
         Elements dds = Jsoup.parse(catalogHtml).getElementsByTag("dd");
+        int i=0;
         for (Element dd : dds) {
             String title = dd.getElementsByTag("a").first().text();
             String href = root + dd.getElementsByTag("a").first().attr("href");
-            catalogs.add(new Catalog(title, href));
+            catalogs.add(new Catalog(title, href,i));
+            i++;
         }
         return catalogs;
     }

@@ -32,19 +32,19 @@ public class Zhai extends Site {
         List<Catalog> catalogs = new ArrayList<>();
         for (int i = 0; ; i++) {
             if (i >= as1.size()) break;
-            catalogs.add(getCatalog(as1.get(i)));
+            catalogs.add(getCatalog(as1.get(i),i));
             if (i >= as2.size()) break;
-            catalogs.add(getCatalog(as2.get(i)));
+            catalogs.add(getCatalog(as2.get(i),i));
             if (i >= as3.size()) break;
-            catalogs.add(getCatalog(as3.get(i)));
+            catalogs.add(getCatalog(as3.get(i),i));
         }
         return catalogs;
     }
 
-    private Catalog getCatalog(Element a) {
+    private Catalog getCatalog(Element a,int i) {
         String url = root + a.attr("href");
         String name = a.text();
-        return new Catalog(name, url);
+        return new Catalog(name, url,i);
     }
 
     @Override
