@@ -54,6 +54,7 @@ class ReadActivity : AppCompatActivity() {
         catalog = intent.getSerializableExtra("catalog") as Catalog
         mergerBook = intent.getSerializableExtra("book") as MergerBook
         readBookControl.initTextDrawableIndex()
+        readBookControl.pageMode = 3
     }
 
     private fun initView() {
@@ -214,9 +215,31 @@ class ReadActivity : AppCompatActivity() {
 
     private fun initBook() {
         book = if (!TextUtils.isEmpty(catalog.siteName) && !TextUtils.isEmpty(catalog.siteUrl)) {
-            Book(mergerBook.bookName, mergerBook.author, catalog.siteUrl, mergerBook.imageUrl, mergerBook.chapterSize, mergerBook.lastUpdateTime, mergerBook.lastChapterName, catalog.siteName, mergerBook.introduce, mergerBook.classify)
+            Book(
+                mergerBook.bookName,
+                mergerBook.author,
+                catalog.siteUrl,
+                mergerBook.imageUrl,
+                mergerBook.chapterSize,
+                mergerBook.lastUpdateTime,
+                mergerBook.lastChapterName,
+                catalog.siteName,
+                mergerBook.introduce,
+                mergerBook.classify
+            )
         } else {
-            Book(mergerBook.bookName, mergerBook.author, mergerBook.list[0].url, mergerBook.imageUrl, mergerBook.chapterSize, mergerBook.lastUpdateTime, mergerBook.lastChapterName, mergerBook.list[0].siteName, mergerBook.introduce, mergerBook.classify)
+            Book(
+                mergerBook.bookName,
+                mergerBook.author,
+                mergerBook.list[0].url,
+                mergerBook.imageUrl,
+                mergerBook.chapterSize,
+                mergerBook.lastUpdateTime,
+                mergerBook.lastChapterName,
+                mergerBook.list[0].siteName,
+                mergerBook.introduce,
+                mergerBook.classify
+            )
         }
         Log.d("ReadActivity", book.toString())
     }
@@ -250,19 +273,19 @@ class ReadActivity : AppCompatActivity() {
             R.id.action_change_source -> {
                 menuMiss()
                 ChangeSourceDialog.builder(this@ReadActivity)
-                        .setData(mergerBook.list, book.url)
-                        .setListener(object : ChangeSourceDialog.itemClickListener {
-                            override fun itemClick(site: MergerBook.Site) {
-                                book.url = site.url
-                                book.siteName = site.siteName
-                                catalog.siteName = site.siteName
-                                catalog.siteUrl = site.url
-                                mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE)
-                                if (mPageLoader is PageLoaderNet) {
-                                    (mPageLoader as PageLoaderNet).changeSourceFinish(book)
-                                }
+                    .setData(mergerBook.list, book.url)
+                    .setListener(object : ChangeSourceDialog.itemClickListener {
+                        override fun itemClick(site: MergerBook.Site) {
+                            book.url = site.url
+                            book.siteName = site.siteName
+                            catalog.siteName = site.siteName
+                            catalog.siteUrl = site.url
+                            mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE)
+                            if (mPageLoader is PageLoaderNet) {
+                                (mPageLoader as PageLoaderNet).changeSourceFinish(book)
                             }
-                        }).show()
+                        }
+                    }).show()
             }
         }
 
@@ -270,8 +293,12 @@ class ReadActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         SPUtils.setObject(this, mergerBook.bookName + mergerBook.author, catalog)
+        if (mPageLoader is PageLoaderNet) {
+            mPageLoader.closeBook()
+        }
+        super.onBackPressed()
+
     }
 
 }

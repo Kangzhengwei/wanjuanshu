@@ -9,6 +9,7 @@ import com.zia.easybook.utils.NetworkUtils;
 import com.zia.easybookmodule.bean.Book;
 import com.zia.easybookmodule.bean.Catalog;
 import com.zia.easybookmodule.engine.EasyBook;
+import com.zia.easybookmodule.rx.Disposable;
 import com.zia.easybookmodule.rx.Observer;
 import com.zia.easybookmodule.rx.Subscriber;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class PageLoaderNet extends PageLoader {
 
     private List<String> downloadingChapterList = new ArrayList<>();
+    private Disposable disposable;
 
     PageLoaderNet(PageView pageView, Book book, Catalog catalog, Callback callback) {
         super(pageView, book, catalog, callback);
@@ -34,7 +36,7 @@ public class PageLoaderNet extends PageLoader {
             // 打开章节
             skipToChapter(catalog.getIndex(), catalog.getDurChapterPage());
         } else {
-            EasyBook.getCatalog(book).subscribe(new Subscriber<List<Catalog>>() {
+            disposable = EasyBook.getCatalog(book).subscribe(new Subscriber<List<Catalog>>() {
                 @Override
                 public void onFinish(@NonNull List<Catalog> catalogs) {
                     book.setChapterSize(String.valueOf(catalogs.size()));
@@ -191,6 +193,9 @@ public class PageLoaderNet extends PageLoader {
 
     @Override
     public void closeBook() {
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.closeBook();
     }
 

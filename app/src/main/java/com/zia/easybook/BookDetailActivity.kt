@@ -30,7 +30,6 @@ class BookDetailActivity : AppCompatActivity() {
     private lateinit var adapter: CatalogAdapter
     private lateinit var book: Book
     //控制内存泄漏
-    private var downloadDisposable: Disposable? = null
     private var searchDisposable: Disposable? = null
     private var list = ArrayList<Catalog>()
     private var realm: Realm? = null
@@ -98,7 +97,6 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        downloadDisposable?.dispose()
         searchDisposable?.dispose()
         super.onDestroy()
     }

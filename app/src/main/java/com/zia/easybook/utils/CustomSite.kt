@@ -63,8 +63,7 @@ class CustomSite {
     },
     "chapterLines": "//*[@id='content']/text()",
     "chapterEncodeType": "utf-8",
-    "cleaner": "官术网|biyuwu.cc"
-}]"""
+    "cleaner": "官术网|biyuwu.cc"}]"""
         }
     }
 }
